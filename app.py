@@ -13,6 +13,23 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///vot
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['ADMIN_CODE'] = os.getenv('ADMIN_CODE', 'admin123')
 
+# Ensure database directory exists
+db_url = app.config['SQLALCHEMY_DATABASE_URI']
+if db_url.startswith('sqlite:///'):
+    db_path = db_url.replace('sqlite:///', '')
+    if db_path != ':memory:':
+        # Handle relative paths
+        if not os.path.isabs(db_path):
+            db_path = os.path.join(app.root_path, db_path)
+
+        db_dir = os.path.dirname(db_path)
+        if db_dir and not os.path.exists(db_dir):
+            try:
+                os.makedirs(db_dir)
+                print(f"Created database directory: {db_dir}")
+            except OSError as e:
+                print(f"Error creating database directory {db_dir}: {e}")
+
 db = SQLAlchemy(app)
 
 class VoterCode(db.Model):
