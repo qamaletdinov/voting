@@ -42,12 +42,7 @@
     pip install -r requirements.txt
     ```
 
-4.  **Инициализируйте базу данных**:
-    ```bash
-    python scripts/setup_full.py
-    ```
-
-5.  **Запустите сервер (Gunicorn)**:
+4.  **Запустите сервер (Gunicorn)**:
     ```bash
     gunicorn -w 4 -b 0.0.0.0:80 app:app
     ```
