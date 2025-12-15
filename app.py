@@ -31,6 +31,15 @@ class Settings(db.Model):
     key = db.Column(db.String(50), unique=True, nullable=False)
     value = db.Column(db.String(200), nullable=False)
 
+# Ensure DB is created and initialized
+with app.app_context():
+    try:
+        db.create_all()
+        if not Settings.query.filter_by(key='voting_status').first():
+            db.session.add(Settings(key='voting_status', value='closed'))
+            db.session.commit()
+    except Exception as e:
+        print(f"Database initialization error: {e}")
 
 def vote_open():
     # Check DB for status
