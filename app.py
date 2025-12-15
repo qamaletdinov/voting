@@ -130,6 +130,7 @@ def admin_init():
 
 
 @app.route('/admin', methods=['GET', 'POST'])
+@app.route('/admin/', methods=['GET', 'POST'])
 def admin_login():
     if request.method == 'POST':
         code = request.form.get('code')
