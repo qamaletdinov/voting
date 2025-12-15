@@ -1,0 +1,13 @@
+/* Custom styles can go here */
+body {
+    background-color: #f8f9fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.card {
+    border: none;
+    border-radius: 1rem;
+}
+.btn-lg {
+    border-radius: 0.5rem;
+}
+

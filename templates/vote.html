@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card shadow-sm border-0">
+  <div class="card-header bg-white py-3 border-bottom-0">
+    <h2 class="h4 mb-0 text-center text-primary">Бюллетень для голосования</h2>
+  </div>
+  <div class="card-body p-4">
+    <div class="alert alert-warning text-center mb-4" role="alert">
+      Пожалуйста, выберите одного кандидата из списка ниже. Это действие необратимо.
+    </div>
+
+    <form method="post">
+      <div class="list-group mb-4 shadow-sm">
+        {% for c in candidates %}
+          <label class="list-group-item list-group-item-action d-flex align-items-center p-3 cursor-pointer">
+            <input class="form-check-input me-3" type="radio" name="candidate" value="{{ c.id }}" id="c{{ c.id }}" required style="transform: scale(1.2);">
+            <span class="fs-5">{{ c.name }}</span>
+          </label>
+        {% endfor %}
+      </div>
+
+      <div class="d-flex justify-content-between align-items-center mt-5">
+        <div class="text-muted small">
+          Ваш код: <code class="bg-light px-2 py-1 rounded">{{ code }}</code>
+        </div>
+        <div>
+          <a href="{{ url_for('index') }}" class="btn btn-light me-2">Отмена</a>
+          <button type="submit" class="btn btn-success btn-lg shadow-sm px-4">Подтвердить выбор</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+

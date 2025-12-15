@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="p-5 mb-4 bg-white rounded-3 shadow-sm text-center">
+  <div class="container-fluid py-5">
+    <h1 class="display-5 fw-bold text-primary">Добро пожаловать!</h1>
+    <p class="col-md-8 fs-4 mx-auto text-muted">
+      Это официальная платформа для онлайн-голосования.
+      Ваш голос важен для нас. Процесс голосования безопасен и анонимен.
+    </p>
+    <div class="d-grid gap-2 d-sm-flex justify-content-sm-center mt-5">
+      <a href="{{ url_for('enter') }}" class="btn btn-primary btn-lg px-5 gap-3 shadow-sm">
+        Проголосовать
+      </a>
+      <a href="{{ url_for('admin_login') }}" class="btn btn-outline-secondary btn-lg px-4">
+        Администратор
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}
+

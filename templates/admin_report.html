@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block title %}Результаты голосования{% endblock %}
+
+{% block content %}
+<div class="card shadow-sm border-0">
+  <div class="card-header bg-white py-3 border-bottom-0 d-flex justify-content-between align-items-center">
+    <h2 class="h4 mb-0 text-primary">Результаты голосования</h2>
+    <span class="badge bg-secondary">Всего голосов: {{ total_votes }}</span>
+  </div>
+  <div class="card-body p-4">
+
+    <div class="mb-4 p-3 bg-light rounded border">
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <strong>Статус голосования:</strong>
+          {% if status == 'open' %}
+            <span class="badge bg-success">ОТКРЫТО</span>
+          {% else %}
+            <span class="badge bg-danger">ЗАКРЫТО</span>
+          {% endif %}
+        </div>
+        <div>
+          <form action="{{ url_for('admin_action') }}" method="post" class="d-inline">
+            <input type="hidden" name="code" value="{{ code }}">
+            {% if status == 'open' %}
+              <button type="submit" name="action" value="stop" class="btn btn-danger btn-sm">Остановить голосование</button>
+            {% else %}
+              <button type="submit" name="action" value="start" class="btn btn-success btn-sm">Запустить голосование</button>
+            {% endif %}
+          </form>
+
+          <form action="{{ url_for('admin_action') }}" method="post" class="d-inline ms-2" onsubmit="return confirm('Вы уверены? Это обнулит все голоса и статус кодов.');">
+            <input type="hidden" name="code" value="{{ code }}">
+            <button type="submit" name="action" value="reset" class="btn btn-warning btn-sm">Сбросить результаты</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    {% if candidates %}
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead class="table-light">
+            <tr>
+              <th scope="col" style="width: 5%">#</th>
+              <th scope="col">Кандидат</th>
+              <th scope="col" class="text-end">Голоса</th>
+              <th scope="col" style="width: 20%">Процент</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for c in candidates %}
+              {% set percent = (c.votes / total_votes * 100)|round(1) if total_votes > 0 else 0 %}
+              <tr>
+                <th scope="row">{{ loop.index }}</th>
+                <td class="fw-bold">{{ c.name }}</td>
+                <td class="text-end">{{ c.votes }}</td>
+                <td>
+                  <div class="d-flex align-items-center">
+                    <div class="progress flex-grow-1 me-2" style="height: 6px;">
+                      <div class="progress-bar" role="progressbar" style="width: {{ percent }}%;" aria-valuenow="{{ percent }}" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <small class="text-muted">{{ percent }}%</small>
+                  </div>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <p class="text-center text-muted my-5">Кандидатов пока нет.</p>
+    {% endif %}
+
+    <div class="mt-5 text-center">
+      <a href="{{ url_for('index') }}" class="btn btn-outline-primary">Вернуться на главную</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

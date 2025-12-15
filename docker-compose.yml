@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  voting-app:
+    build: .
+    ports:
+      - "80:8000"
+    volumes:
+      - ./instance:/app/instance
+      - ./codes.csv:/app/codes.csv
+      - ./list1.csv:/app/list1.csv
+    environment:
+      - SECRET_KEY=prod_secret_key_change_this
+      - DATABASE_URL=sqlite:///instance/voting.db
+      - ADMIN_CODE=Kazan1552
+    restart: always
+

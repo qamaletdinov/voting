@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+instance/
+.env
+.venv/
+.idea/
+.pytest_cache/
+voting_deploy.zip
+package.ps1
+setup_done.txt
+
