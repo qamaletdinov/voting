@@ -11,7 +11,7 @@ services:
       - ./list1.csv:/app/list1.csv
     environment:
       - SECRET_KEY=prod_secret_key_change_this
-      - DATABASE_URL=sqlite:///instance/voting.db
+      - DATABASE_URL=sqlite:////app/instance/voting.db
       - ADMIN_CODE=Kazan1552
     restart: always
 

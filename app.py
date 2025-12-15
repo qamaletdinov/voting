@@ -1,8 +1,13 @@
 import os
+import logging
 from datetime import datetime
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from dotenv import load_dotenv
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # Load env
 load_dotenv()
@@ -15,6 +20,8 @@ app.config['ADMIN_CODE'] = os.getenv('ADMIN_CODE', 'admin123')
 
 # Ensure database directory exists
 db_url = app.config['SQLALCHEMY_DATABASE_URI']
+logger.info(f"Database URL: {db_url}")
+
 if db_url.startswith('sqlite:///'):
     db_path = db_url.replace('sqlite:///', '')
     if db_path != ':memory:':
@@ -22,13 +29,15 @@ if db_url.startswith('sqlite:///'):
         if not os.path.isabs(db_path):
             db_path = os.path.join(app.root_path, db_path)
 
+        logger.info(f"Resolved Database Path: {db_path}")
+
         db_dir = os.path.dirname(db_path)
         if db_dir and not os.path.exists(db_dir):
             try:
                 os.makedirs(db_dir)
-                print(f"Created database directory: {db_dir}")
+                logger.info(f"Created database directory: {db_dir}")
             except OSError as e:
-                print(f"Error creating database directory {db_dir}: {e}")
+                logger.error(f"Error creating database directory {db_dir}: {e}")
 
 db = SQLAlchemy(app)
 
@@ -55,8 +64,9 @@ with app.app_context():
         if not Settings.query.filter_by(key='voting_status').first():
             db.session.add(Settings(key='voting_status', value='closed'))
             db.session.commit()
+        logger.info("Database initialized successfully")
     except Exception as e:
-        print(f"Database initialization error: {e}")
+        logger.error(f"Database initialization error: {e}")
 
 def vote_open():
     # Check DB for status
@@ -64,7 +74,8 @@ def vote_open():
     try:
         s = Settings.query.filter_by(key='voting_status').first()
         return s and s.value == 'open'
-    except:
+    except Exception as e:
+        logger.error(f"Error checking vote status: {e}")
         return False
 
 
